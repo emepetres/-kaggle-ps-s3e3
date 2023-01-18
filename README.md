@@ -9,7 +9,7 @@ NOTES:
 Tasks to obtain the best model:
 
 * [x] Basic eda
-* [ ] Cross-validation
+* [x] Cross-validation
 * [ ] First training
 * [ ] First submission
 * [ ] Merge original dataset

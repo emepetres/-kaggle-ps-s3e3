@@ -1,5 +1,6 @@
 DATA_STORAGE_PATH = "/run/media/jcarnero/linux-data"
 COMPETITION = "playground-series-s3e3"
+SEED = 42
 
 DATA_PATH = DATA_STORAGE_PATH + "/kaggle/" + COMPETITION
 INPUTS = DATA_PATH + "/input"

@@ -3,31 +3,33 @@ from typing import Tuple
 import pandas as pd
 from sklearn import model_selection
 
+from common.utils import set_seed
 from common.kaggle import download_competition_data
 import config
 
 
 def _merge_with_original_data(
-    data: pd.DataFrame, test: pd.DataFrame
+    data: pd.DataFrame,
+    test: pd.DataFrame,
+    add_origin_feature: bool = True,
 ) -> Tuple[pd.DataFrame, pd.DataFrame]:
     from common.kaggle import download_dataset
 
     original_path = Path(config.INPUTS) / "original"
-    download_dataset("fedesoriano", "stroke-prediction-dataset", original_path)
+    download_dataset(
+        "pavansubhasht", "ibm-hr-analytics-attrition-dataset", original_path
+    )
 
     original_data = pd.read_csv(
         original_path / "healthcare-dataset-stroke-data.csv"
     ).drop(columns="id")
     synthetic_data = data.drop(columns="id")
     test_data = test
-    # # original_data = pd.DataFrame(
-    # #     data=np.hstack([original_data["data"], original_data["target"].reshape(-1, 1)]),
-    # #     columns=synthetic_data.columns,
-    # # )
 
-    original_data["synthetic_data"] = 0
-    synthetic_data["synthetic_data"] = 1
-    test_data["synthetic_data"] = 1
+    if add_origin_feature:
+        original_data["synthetic_data"] = 0
+        synthetic_data["synthetic_data"] = 1
+        test_data["synthetic_data"] = 1
 
     merged_data = pd.concat([synthetic_data, original_data]).reset_index(drop=True)
 
@@ -35,6 +37,8 @@ def _merge_with_original_data(
 
 
 if __name__ == "__main__":
+    set_seed(config.SEED)
+
     # Download data if necessary
     download_competition_data(config.COMPETITION, config.INPUTS)
 
@@ -51,7 +55,9 @@ if __name__ == "__main__":
     df = df.sample(frac=1).reset_index(drop=True)
 
     # initiate the kfold class from model_selection module
-    kf = model_selection.StratifiedKFold(n_splits=config.FOLDS)
+    kf = model_selection.StratifiedKFold(
+        n_splits=config.FOLDS, random_state=config.SEED, shuffle=True
+    )
 
     # fill the new kfold column
     for f, (t_, v_) in enumerate(kf.split(X=df, y=df[config.TARGET].values)):
