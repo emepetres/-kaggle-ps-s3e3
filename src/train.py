@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 
 import config
+from common.utils import set_seed
 from model_dispatcher import (
     CustomModel,
     DecisionTreeModel,
@@ -21,28 +22,20 @@ def run(fold: int, model: CustomModel) -> Tuple[float, np.ndarray]:
     df = pd.read_csv(config.TRAIN_FOLDS)
     df_test = pd.read_csv(config.PREPROCESSED_TEST_DATA)
 
-    ord_features = ["age", "avg_glucose_level", "bmi"]
+    # let drop columns that doesn't hold information
+    df.drop(columns=["id", "Over18"], inplace=True)
+    df_test.drop(columns=["id", "Over18"], inplace=True)
 
-    # # # feature engineering
-    # # smoking_status_mapping = {
-    # #     "never smoked": 0,
-    # #     "formerly smoked": 1,
-    # #     "smokes": 2,
-    # #     "Unknown": 3,
-    # # }
-    # # df.loc[:, "smoking_status"] = df.smoking_status.map(smoking_status_mapping)
-    # # df_test.loc[:, "smoking_status"] = df_test.smoking_status.map(
-    # #     smoking_status_mapping
-    # # )
-    # # ord_features.append("smoking_status")
-
-    # all columns are features except target, id and kfold columns
-    features = [f for f in df.columns if f not in (config.TARGET, "kfold", "id")]
-    cat_features = [f for f in features if f not in ord_features]
+    # all columns are features except target and kfold columns
+    features = [
+        f for f in df.columns if f not in (config.TARGET, "kfold", "id", "Over18")
+    ]
+    cat_features = df.select_dtypes("object").columns.to_list()
+    num_features = [f for f in features if f not in cat_features]
 
     # initialize model
     custom_model = model(
-        df, fold, config.TARGET, cat_features, ord_features, test=df_test
+        df, fold, config.TARGET, cat_features, num_features, test=df_test
     )
 
     # encode all features
@@ -92,6 +85,7 @@ if __name__ == "__main__":
             " models are supported"
         )
 
+    set_seed(config.SEED)
     validation_scores = []
     preds = []
     for fold_ in range(config.FOLDS):

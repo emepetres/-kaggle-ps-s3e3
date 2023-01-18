@@ -4,14 +4,14 @@ Kaggle Playground Series 3, Episode 3 competition
 
 NOTES:
 
-* TODO
+* Catboost by default seems to be the best.
+* RandomForest performs slightly better than XGBoost.
 
 Tasks to obtain the best model:
 
 * [x] Basic eda
 * [x] Cross-validation
-* [ ] First training
-* [ ] First submission
+* [x] First training
 * [ ] Merge original dataset
 * [ ] Implement LightGBM and Catboost
 * [ ] Set order in smoke status

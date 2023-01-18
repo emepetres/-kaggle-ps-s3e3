@@ -15,6 +15,8 @@ from common.encoding import (
     encode_to_values,
 )
 
+import config
+
 
 class CustomModel:
     def __init__(
@@ -143,9 +145,11 @@ class LightGBM(DecisionTreeModel):
             # # "colsample_bytree": 0.5094776453903889,
             # # "reg_alpha": 0.007603254267129311,
             # # "reg_lambda": 0.008134379186044243,
+            "random_state": config.SEED,
+            "metric": "auc",
         }
 
-        self.model = LGBMClassifier(metric="auc", **params)
+        self.model = LGBMClassifier(**params)
 
         # fit model on training data
         self.model.fit(
@@ -161,14 +165,14 @@ class CatBoost(DecisionTreeModel):
     def fit(self):
         # https://www.kaggle.com/code/alexandershumilin/playground-series-s3-e1-catboost-xgboost-lgbm
         params = {
-            "depth": 3,
-            "learning_rate": 0.01,
-            "rsm": 0.5,
-            "subsample": 0.931,
-            "l2_leaf_reg": 69,
-            "min_data_in_leaf": 20,
-            "random_strength": 0.175,
-            "random_seed": 228,
+            # # "depth": 3,
+            # # "learning_rate": 0.01,
+            # # "rsm": 0.5,
+            # # "subsample": 0.931,
+            # # "l2_leaf_reg": 69,
+            # # "min_data_in_leaf": 20,
+            # # "random_strength": 0.175,
+            "random_seed": config.SEED,
             "use_best_model": True,
             "task_type": "CPU",
             "bootstrap_type": "Bernoulli",
