@@ -12,8 +12,8 @@ Tasks to obtain the best model:
 * [x] Basic eda
 * [x] Cross-validation
 * [x] First training
-* [x] Use AutoGluon framework
-* [ ] Use ten folds
+* [x] Use AutoGluon framework -> improvement over catboost default
+* [x] Use ten folds -> improvement by ~0.02%, but test public score disagree
 * [ ] Merge original dataset
 * [ ] Implement Lasso regression
 * [ ] Implement logistic regression

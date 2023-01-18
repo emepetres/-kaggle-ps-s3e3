@@ -8,7 +8,7 @@ PREPROCESSED = DATA_PATH + "/preprocess"
 INTERMEDIATE = DATA_PATH + "/intermediate"
 OUTPUTS = DATA_PATH + "/output"
 
-FOLDS = 5
+FOLDS = 10
 TARGET = "Attrition"
 TRAIN_DATA = INPUTS + "/train.csv"
 TEST_DATA = INPUTS + "/test.csv"
