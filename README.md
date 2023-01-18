@@ -13,8 +13,6 @@ Tasks to obtain the best model:
 * [x] Cross-validation
 * [x] First training
 * [ ] Merge original dataset
-* [ ] Implement LightGBM and Catboost
-* [ ] Set order in smoke status
 * [ ] Use AutoGluon framework
 * [ ] Implement Lasso regression
 * [ ] Use ten folds
