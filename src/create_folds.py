@@ -21,10 +21,10 @@ def _merge_with_original_data(
     )
 
     original_data = pd.read_csv(
-        original_path / "healthcare-dataset-stroke-data.csv"
-    ).drop(columns="id")
+        original_path / "WA_Fn-UseC_-HR-Employee-Attrition.csv"
+    ).drop(columns="EmployeeNumber")
     synthetic_data = data.drop(columns="id")
-    test_data = test
+    test_data = test.drop(columns="id")
 
     if add_origin_feature:
         original_data["synthetic_data"] = 0
