@@ -12,11 +12,10 @@ Tasks to obtain the best model:
 * [x] Basic eda
 * [x] Cross-validation
 * [x] First training
-* [ ] Merge original dataset
-* [ ] Use AutoGluon framework
-* [ ] Implement Lasso regression
+* [x] Use AutoGluon framework
 * [ ] Use ten folds
-* [ ] Try original dataset without adding label for original/synthetic
+* [ ] Merge original dataset
+* [ ] Implement Lasso regression
 * [ ] Implement logistic regression
 * [ ] Scale numerical variables between 0 and 1
 

@@ -28,7 +28,7 @@ def run(fold: int, model: CustomModel) -> Tuple[float, np.ndarray]:
 
     # all columns are features except target and kfold columns
     features = [
-        f for f in df.columns if f not in (config.TARGET, "kfold", "id", "Over18")
+        f for f in df.columns if f not in (config.TARGET, "kfold")
     ]
     cat_features = df.select_dtypes("object").columns.to_list()
     num_features = [f for f in features if f not in cat_features]
