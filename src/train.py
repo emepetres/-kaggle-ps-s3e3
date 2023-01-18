@@ -23,13 +23,11 @@ def run(fold: int, model: CustomModel) -> Tuple[float, np.ndarray]:
     df_test = pd.read_csv(config.PREPROCESSED_TEST_DATA)
 
     # let drop columns that doesn't hold information
-    df.drop(columns=["id", "Over18"], inplace=True)
-    df_test.drop(columns=["id", "Over18"], inplace=True)
+    df.drop(columns=["Over18"], inplace=True)
+    df_test.drop(columns=["Over18"], inplace=True)
 
     # all columns are features except target and kfold columns
-    features = [
-        f for f in df.columns if f not in (config.TARGET, "kfold")
-    ]
+    features = [f for f in df.columns if f not in (config.TARGET, "kfold")]
     cat_features = df.select_dtypes("object").columns.to_list()
     num_features = [f for f in features if f not in cat_features]
 

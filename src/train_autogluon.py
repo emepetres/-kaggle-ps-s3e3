@@ -15,8 +15,8 @@ def run(fold: int) -> Tuple[float, np.ndarray]:
     df_test = pd.read_csv(config.PREPROCESSED_TEST_DATA)
 
     # let drop columns that doesn't hold information
-    df.drop(columns=["id", "Over18"], inplace=True)
-    df_test.drop(columns=["id", "Over18"], inplace=True)
+    df.drop(columns=["Over18"], inplace=True)
+    df_test.drop(columns=["Over18"], inplace=True)
 
     # get training & validation data using folds
     df_train = df[df.kfold != fold].reset_index(drop=True).drop(columns="kfold")

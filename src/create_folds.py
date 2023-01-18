@@ -26,6 +26,12 @@ def _merge_with_original_data(
     synthetic_data = data.drop(columns="id")
     test_data = test.drop(columns="id")
 
+    target_mapping = {
+        "Yes": 1,
+        "No": 0,
+    }
+    original_data[config.TARGET] = original_data[config.TARGET].map(target_mapping)
+
     if add_origin_feature:
         original_data["synthetic_data"] = 0
         synthetic_data["synthetic_data"] = 1
@@ -46,7 +52,7 @@ if __name__ == "__main__":
     df = pd.read_csv(config.TRAIN_DATA)
     df_test = pd.read_csv(config.TEST_DATA)
 
-    # # df, df_test = _merge_with_original_data(df, df_test)
+    df, df_test = _merge_with_original_data(df, df_test, add_origin_feature=False)
 
     # we create a new column called kfold and fill it with -1
     df["kfold"] = -1
