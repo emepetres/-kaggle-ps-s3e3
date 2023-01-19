@@ -14,6 +14,7 @@ from model_dispatcher import (
     XGBoost,
     LightGBM,
     CatBoost,
+    Lasso,
 )
 
 
@@ -72,6 +73,8 @@ if __name__ == "__main__":
         model = LightGBM
     elif args.model == "cb":
         model = CatBoost
+    elif args.model == "ls":
+        model = Lasso
     else:
         raise argparse.ArgumentError(
             "Only 'rf' (random forest)"
@@ -79,6 +82,7 @@ if __name__ == "__main__":
             ", 'xgb' (XGBoost)"
             ", 'lgbm (LightGBM)'"
             ", 'cb' (CatBoost)"
+            ", 'ls' (Lasso)"
             # # "and 'emb' (Tabular NN with embeddings)"
             " models are supported"
         )

@@ -1,7 +1,7 @@
 import copy
 import pandas as pd
 from typing import List, Tuple
-from sklearn.preprocessing import OneHotEncoder, LabelEncoder
+from sklearn.preprocessing import OneHotEncoder, LabelEncoder, StandardScaler
 from sklearn.decomposition import TruncatedSVD
 from sklearn.compose import make_column_transformer
 from scipy import sparse
@@ -77,6 +77,22 @@ def encode_to_values(
         data.loc[:, col] = lbl.transform(data[col])
         if test is not None:
             test.loc[:, col] = lbl.transform(test[col])
+
+
+def scale_values(
+    data: pd.DataFrame, features: List[str], test: pd.DataFrame = None
+):  # Scale numerical features
+    """
+    Scale numerical features between 0 and 1.
+    Transforms inline.
+    """
+
+    scaler = StandardScaler()
+    scaler.fit(data[features].values)
+
+    data[features] = scaler.transform(data[features].values)
+    if test is not None:
+        test[features] = scaler.transform(test[features].values)
 
 
 def reduce_dimensions_svd(

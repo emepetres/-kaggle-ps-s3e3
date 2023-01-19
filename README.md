@@ -15,7 +15,7 @@ Tasks to obtain the best model:
 * [x] Use AutoGluon framework -> improvement over catboost default
 * [x] Use ten folds -> improvement by ~0.02%, but test public score disagree
 * [x] Merge original dataset -> improvement on catboost validaton, and 0.4 points in autogluon public test score. catboost without feature for separating datasets, autogluon with it.
-* [ ] Implement Lasso regression
+* [x] Implement Lasso regression -> not much improvement
 * [ ] Implement logistic regression
 * [ ] Scale numerical variables between 0 and 1
 
