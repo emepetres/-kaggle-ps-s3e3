@@ -20,7 +20,10 @@ def fill_cat_with_none(data: pd.DataFrame, cat_features: List[str]):
 
 
 def encode_to_onehot(  # one-hot encoding
-    df_train: pd.DataFrame, df_valid: pd.DataFrame, features: List[str]
+    df_train: pd.DataFrame,
+    df_valid: pd.DataFrame,
+    features: List[str],
+    df_test: pd.DataFrame = None,
 ) -> Tuple[pd.DataFrame, pd.DataFrame, List[str]]:
     """
     Best sparse optimization, but slow on trees algorithms
@@ -48,9 +51,15 @@ def encode_to_onehot(  # one-hot encoding
         transformer.transform(df_valid[features]),
         columns=transformer.get_feature_names_out(),
     )
+    tdf_test = None
+    if df_test is not None:
+        tdf_test = pd.DataFrame.sparse.from_spmatrix(
+            transformer.transform(df_test[features]),
+            columns=transformer.get_feature_names_out(),
+        )
 
     # return training & validation features
-    return (tdf_train, tdf_valid)
+    return (tdf_train, tdf_valid, tdf_test)
 
 
 def encode_to_values(

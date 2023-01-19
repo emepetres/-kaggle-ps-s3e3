@@ -11,6 +11,7 @@ from model_dispatcher import (
     CustomModel,
     DecisionTreeModel,
     DecisionTreeModelSVD,
+    LogisticRegressionModel,
     XGBoost,
     LightGBM,
     CatBoost,
@@ -58,12 +59,14 @@ def run(fold: int, model: CustomModel) -> Tuple[float, np.ndarray]:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--model", type=str, default="lgbm")
+    model_arg = parser.add_argument("--model", type=str, default="lgbm")
 
     args = parser.parse_args()
 
     model = None
-    if args.model == "rf":
+    if args.model == "lr":
+        model = LogisticRegressionModel
+    elif args.model == "rf":
         model = DecisionTreeModel
     elif args.model == "svd":
         model = DecisionTreeModelSVD
@@ -77,14 +80,18 @@ if __name__ == "__main__":
         model = Lasso
     else:
         raise argparse.ArgumentError(
-            "Only 'rf' (random forest)"
-            ", 'svd' (random forest with truncate svd)"
-            ", 'xgb' (XGBoost)"
-            ", 'lgbm (LightGBM)'"
-            ", 'cb' (CatBoost)"
-            ", 'ls' (Lasso)"
-            # # "and 'emb' (Tabular NN with embeddings)"
-            " models are supported"
+            argument=model_arg,
+            message=(
+                "Only ",
+                "'lr' (logistic regression)"
+                ", 'rf' (random forest)"
+                ", 'svd' (random forest with truncate svd)"
+                ", 'xgb' (XGBoost)"
+                ", 'lgbm (LightGBM)'"
+                ", 'cb' (CatBoost)"
+                ", 'ls' (Lasso)"
+                " models are supported",
+            ),
         )
 
     set_seed(config.SEED)

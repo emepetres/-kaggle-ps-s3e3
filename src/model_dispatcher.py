@@ -76,8 +76,8 @@ class LogisticRegressionModel(CustomModel):
         self.df_valid = self.data[self.data.kfold == self.fold].reset_index(drop=True)
 
         # get encoded dataframes with new categorical features
-        df_cat_train, df_cat_valid = encode_to_onehot(
-            self.df_train, self.df_valid, self.cat_features
+        df_cat_train, df_cat_valid, df_cat_test = encode_to_onehot(
+            self.df_train, self.df_valid, self.cat_features, self.test
         )
 
         # we have a new set of categorical features
@@ -85,9 +85,14 @@ class LogisticRegressionModel(CustomModel):
 
         dfx_train = pd.concat([df_cat_train, self.df_train[self.num_features]], axis=1)
         dfx_valid = pd.concat([df_cat_valid, self.df_valid[self.num_features]], axis=1)
+        dfx_test = None
+        if self.test is not None:
+            dfx_test = pd.concat([df_cat_test, self.test[self.num_features]], axis=1)
 
         self.x_train = dfx_train[encoded_features].values
         self.x_valid = dfx_valid[encoded_features].values
+        if dfx_test is not None:
+            self.x_test = dfx_test[encoded_features].values
 
     def fit(self):
         self.model = linear_model.LogisticRegression()
