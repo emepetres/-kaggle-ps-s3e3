@@ -35,7 +35,6 @@ class CustomModel:
         self.cat_features = cat_features
         self.num_features = ord_features
         self.test = test
-        self.scale = False  # used to automatically normalize numerical features
 
         self.features = cat_features + ord_features
 
@@ -68,7 +67,6 @@ class CustomModel:
 class LogisticRegressionModel(CustomModel):
     def encode(self):
         # scale numerical values
-        self.scale = True
         scale_values(self.data, self.num_features, self.test)
 
         # get training & validation data using folds
@@ -104,9 +102,6 @@ class LogisticRegressionModel(CustomModel):
 class DecisionTreeModel(CustomModel):
     def encode(self):
         encode_to_values(self.data, self.cat_features, test=self.test)
-        if self.scale:
-            # scale numerical values
-            scale_values(self.data, self.num_features, self.test)
 
         # get training & validation data using folds
         self.df_train = self.data[self.data.kfold != self.fold].reset_index(drop=True)
@@ -148,8 +143,10 @@ class XGBoost(DecisionTreeModel):
 
 class LightGBM(DecisionTreeModel):
     def fit(self):
+        # # cat_indexes = [self.df_train.columns.get_loc(c) for c in self.cat_features]
         params = {
-            # # "n_estimators": 6058,
+            "n_estimators": 150,
+            # # "categorical_feature": cat_indexes,
             # # "num_leaves": 107,
             # # "min_child_samples": 19,
             # # "learning_rate": 0.004899729720251191,
@@ -207,11 +204,7 @@ class CatBoost(DecisionTreeModel):
         )
 
 
-class Lasso(DecisionTreeModel):
-    def encode(self):
-        self.scale = True
-        super().encode()
-
+class Lasso(LogisticRegressionModel):
     def fit(self):
         self.model = linear_model.LassoCV(cv=10, random_state=config.SEED)
 
