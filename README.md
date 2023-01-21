@@ -19,8 +19,9 @@ Tasks to obtain the best model:
 * [x] Implement Lasso regression -> better than xgboost, using one hot encoding
 * [x] Implement logistic regression -> better than xgboost, using one hot encoding
 * [x] Set "categorical_feature=" index as LightGBM parameter -> seems to work worse
-* [ ] Ensemble of multiple algorithms
-* [ ] Scale numerical variables between 0 and 1
+* [x] Ensemble of multiple algorithms -> 0.02 improvement on public test dataset
+* [ ] Ensemble of multiple seeds, ¿or without setting it?
+* [ ] Predict with fastai tabular
 * [ ] Hyperparameters tunning
 
 ## Train, validation & submission

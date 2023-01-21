@@ -56,31 +56,23 @@ def run(fold: int, model: CustomModel) -> Tuple[float, np.ndarray]:
     return (auc, preds)
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-
-    model_arg = parser.add_argument("--model", type=str, default="lgbm")
-
-    args = parser.parse_args()
-
+def parse_model(code: str) -> CustomModel:
     model = None
-    if args.model == "lr":
+    if code == "lr":
         model = LogisticRegressionModel
-    elif args.model == "rf":
+    elif code == "rf":
         model = DecisionTreeModel
-    elif args.model == "svd":
-        model = DecisionTreeModelSVD
-    elif args.model == "xgb":
+    elif code == "xgb":
         model = XGBoost
-    elif args.model == "lgbm":
+    elif code == "lgbm":
         model = LightGBM
-    elif args.model == "cb":
+    elif code == "cb":
         model = CatBoost
-    elif args.model == "ls":
+    elif code == "ls":
         model = Lasso
     else:
         raise argparse.ArgumentError(
-            argument=model_arg,
+            argument=models_arg,
             message=(
                 "Only ",
                 "'lr' (logistic regression)"
@@ -94,13 +86,31 @@ if __name__ == "__main__":
             ),
         )
 
+    return model
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+
+    models_arg = parser.add_argument("--models", type=str, default=None)
+
+    args = parser.parse_args()
+
+    model_list = ["lr", "rf", "xgb", "lgbm", "cb", "ls"]
+    if args.models is not None:
+        model_list = args.models.split(",")
+
+    models = [parse_model(m) for m in model_list]
+
     set_seed(config.SEED)
     validation_scores = []
     preds = []
-    for fold_ in range(config.FOLDS):
-        score, predictions = run(fold_, model)
-        validation_scores.append(score)
-        preds.append(predictions)
+
+    for model in models:
+        for fold_ in range(config.FOLDS):
+            score, predictions = run(fold_, model)
+            validation_scores.append(score)
+            preds.append(predictions)
 
     valid_auc = np.mean(validation_scores)
     print(f"Validation AUC = {valid_auc}")
@@ -111,7 +121,8 @@ if __name__ == "__main__":
     df_sub = pd.read_csv(config.SUBMISSION_SAMPLE)
     df_sub[config.TARGET] = pred
 
+    ensemble_desc = str.join(".", model_list)
     dt = datetime.now().strftime("%y%m%d.%H%M")
-    submission_file = Path(config.OUTPUTS) / f"{dt}-{args.model}-{valid_auc}.csv"
+    submission_file = Path(config.OUTPUTS) / f"{dt}-{ensemble_desc}-{valid_auc}.csv"
     submission_file.parent.mkdir(exist_ok=True)
     df_sub.to_csv(submission_file, index=False)
