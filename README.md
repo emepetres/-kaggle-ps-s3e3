@@ -4,6 +4,9 @@ Kaggle Playground Series 3, Episode 3 competition
 
 NOTES:
 
+* Private leaderboard 19% top. Autogluon worked slightly better than the latest ensemble posted.
+* 8th solution used XGBoost only (ensemble), with OHE, tunning and some simple feature eng.
+<https://www.kaggle.com/code/kirkdco/xgboost-s03e03?scriptVersionId=116904858>
 * Catboost by default seems to be the best.
 * RandomForest performs slightly better than XGBoost.
 * Interestingly, One Hot Encoding seems to work better than Label Enconding for lasso.
